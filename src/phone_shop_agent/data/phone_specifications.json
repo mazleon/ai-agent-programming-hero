@@ -1,0 +1,67 @@
+[
+    {
+        "year": 2023,
+        "model_name": "Samsung Galaxy S23",
+        "chipset_name": "Snapdragon 8 Gen 2",
+        "ram_size": "8GB",
+        "storage_size": "128GB",
+        "camera_features": ["50MP main camera", "12MP ultra-wide", "10MP telephoto"],
+        "charging_features": "25W wired charging, 15W wireless charging",
+        "display_size": "6.1 inches Dynamic AMOLED 2X",
+        "price": 799.99,
+        "battery_capacity": "3900mAh",
+        "operating_system": "Android 13"
+    },
+    {
+        "year": 2023,
+        "model_name": "iPhone 15",
+        "chipset_name": "A16 Bionic",
+        "ram_size": "6GB",
+        "storage_size": "128GB",
+        "camera_features": ["48MP main camera", "12MP ultra-wide"],
+        "charging_features": "27W wired charging, MagSafe wireless charging",
+        "display_size": "6.1 inches Super Retina XDR",
+        "price": 799.00,
+        "battery_capacity": "3349mAh",
+        "operating_system": "iOS 17"
+    },
+    {
+        "year": 2024,
+        "model_name": "Google Pixel 8",
+        "chipset_name": "Google Tensor G3",
+        "ram_size": "8GB",
+        "storage_size": "128GB",
+        "camera_features": ["50MP main camera", "12MP ultra-wide"],
+        "charging_features": "27W wired charging, 18W wireless charging",
+        "display_size": "6.2 inches OLED",
+        "price": 699.00,
+        "battery_capacity": "4575mAh",
+        "operating_system": "Android 14"
+    },
+    {
+        "year": 2024,
+        "model_name": "OnePlus 12",
+        "chipset_name": "Snapdragon 8 Gen 3",
+        "ram_size": "16GB",
+        "storage_size": "256GB",
+        "camera_features": ["50MP main camera", "64MP periscope telephoto", "48MP ultra-wide"],
+        "charging_features": "100W wired charging, 50W wireless charging",
+        "display_size": "6.82 inches AMOLED",
+        "price": 899.99,
+        "battery_capacity": "5400mAh",
+        "operating_system": "Android 14"
+    },
+    {
+        "year": 2023,
+        "model_name": "Xiaomi 13 Pro",
+        "chipset_name": "Snapdragon 8 Gen 2",
+        "ram_size": "12GB",
+        "storage_size": "256GB",
+        "camera_features": ["50MP main camera", "50MP ultra-wide", "50MP telephoto"],
+        "charging_features": "120W wired charging, 50W wireless charging",
+        "display_size": "6.73 inches AMOLED",
+        "price": 999.99,
+        "battery_capacity": "4820mAh",
+        "operating_system": "Android 13"
+    }
+]
