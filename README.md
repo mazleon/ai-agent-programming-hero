@@ -1,5 +1,7 @@
 # Gemini AI Chatbot
 
+![Gemini AI Chatbot Cover](res/cover_photo.jpeg)
+
 A powerful chatbot application powered by Google's Agent Development Kit (ADK), featuring multiple specialized agents for different domains.
 
 ## Features
