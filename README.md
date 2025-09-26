@@ -7,9 +7,11 @@ A powerful chatbot application powered by Google's Agent Development Kit (ADK), 
 ## Features
 
 - **Weather Agent**: Provides current weather information and time for various cities.
-- **Phone Shop Agent**: A comprehensive phone shop assistant with RAG capabilities that can:
-  - Provide phone specifications, prices, and comparisons
-  - Answer warranty policy questions using document retrieval
+- **Phone Shop Agent**: A comprehensive phone shop assistant with FastMCP + RAG capabilities that can:
+  - Access real-time phone specifications, prices, and inventory from SQLite database
+  - Provide current offers and promotional deals
+  - Compare phones with detailed specifications
+  - Answer warranty policy questions using document retrieval (RAG)
   - Help with replacement and return procedures
   - Provide customer support information
   - Search through all store policies and procedures
@@ -43,21 +45,31 @@ A powerful chatbot application powered by Google's Agent Development Kit (ADK), 
    uv pip install -r requirements.txt
    ```
 
+   **For FastMCP Database Features (Required for phone data):**
+
+   ```bash
+   uv pip install fastmcp
+   ```
+
    **For Full RAG Capabilities (Optional):**
 
    ```bash
    uv pip install chromadb sentence-transformers
    ```
 
-   **Note:** If you skip the optional extras, the agent automatically falls back to keyword search over the markdown policy files—so it still answers policy questions without ChromaDB.
+   **Note:** The agent uses FastMCP for phone specifications and SQLite database access. RAG is optional for policy document search (falls back to keyword search).
 
-4. **Prime the RAG Store (Recommended):**
+4. **Initialize the Complete System:**
 
    ```bash
-   python setup_rag.py
+   python setup_fastmcp.py
    ```
 
-   This script builds the `chroma_db/` directory, loads all policy documents, and verifies retrieval before you start answering questions.
+   This script:
+   - Creates and populates the SQLite database with phone data
+   - Sets up the FastMCP server/client architecture
+   - Initializes RAG system for policy documents
+   - Verifies all components are working
 
 ## Project Structure
 
@@ -69,16 +81,23 @@ gemini-ai-bot/
 │   │   ├── agent.py                 # Main phone shop agent configuration
 │   │   ├── .env                     # Environment variables
 │   │   ├── data/
-│   │   │   ├── phone_specifications.json    # Phone data with specs and prices
+│   │   │   ├── phone_specifications.json    # Source phone data (migrated to SQLite)
 │   │   │   ├── warranty_policy.md           # Warranty policy document
 │   │   │   ├── replacement_policy.md        # Replacement policy document
 │   │   │   └── customer_support_faq.md      # Customer support FAQ
-│   │   ├── rag/                     # RAG (Retrieval-Augmented Generation) module
+│   │   ├── database/                # SQLite database system
+│   │   │   ├── init_db.py          # Database initialization script
+│   │   │   └── phone_shop.db       # SQLite database (auto-created)
+│   │   ├── mcp/                    # FastMCP (Model Context Protocol) system
+│   │   │   ├── fastmcp_server.py   # FastMCP server for database access
+│   │   │   └── fastmcp_client.py   # FastMCP client for agent integration
+│   │   ├── rag/                    # RAG (Retrieval-Augmented Generation) module
 │   │   │   ├── __init__.py
-│   │   │   ├── vector_store.py      # ChromaDB vector store implementation
-│   │   │   └── retriever.py         # RAG retrieval tools for ADK
+│   │   │   ├── vector_store.py     # ChromaDB vector store implementation
+│   │   │   └── retriever.py        # RAG retrieval tools for ADK
 │   │   └── tools/
-│   │       └── tool.py              # Tool functions for phone queries and RAG
+│   │       ├── tool.py             # Legacy RAG tools (policy search)
+│   │       └── mcp_tools.py        # FastMCP-powered phone tools
 │   └── weather_agent/
 │       ├── __init__.py
 │       ├── agent.py                 # Weather agent configuration
@@ -94,20 +113,21 @@ gemini-ai-bot/
 
 Navigate to the `src` directory and run the desired agent:
 
-### Phone Shop Agent (Enhanced with RAG)
+### Phone Shop Agent (Enhanced with MCP + RAG)
 
 ```bash
 cd src
 adk run phone_shop_agent
 ```
 
-This agent now includes RAG (Retrieval-Augmented Generation) capabilities and can:
+This agent now includes MCP (Model Context Protocol) for database access and RAG for policy search:
 
-**Phone Information:**
-- Get phone prices by model name
-- Retrieve detailed specifications
-- List all available phones
-- Compare specifications between two phones
+**Phone Information (MCP-powered):**
+- Get real-time phone prices and specifications from SQLite database
+- Check current inventory and stock levels
+- Retrieve active offers and promotional deals
+- Compare phones with detailed specifications
+- Search phones by criteria (price range, year, features)
 
 **Policy & Support (RAG-powered):**
 - Answer warranty questions using document retrieval
@@ -117,11 +137,14 @@ This agent now includes RAG (Retrieval-Augmented Generation) capabilities and ca
 
 **Example queries:**
 
-*Phone Information:*
+*Phone Information (MCP Database):*
 - "What's the price of Samsung Galaxy S23?"
 - "Tell me the specs of iPhone 15"
-- "What phones do you have?"
+- "What phones do you have in stock?"
 - "Compare Google Pixel 8 and OnePlus 12"
+- "Show me current offers and deals"
+- "What phones are under $800?"
+- "Check availability for OnePlus 12"
 
 *Warranty & Policy (RAG):*
 - "How long is the warranty on new phones?"
@@ -139,17 +162,26 @@ adk run weather_agent
 
 Provides weather and time information for cities.
 
-## RAG (Retrieval-Augmented Generation) Setup
+## MCP (Model Context Protocol) + RAG Architecture
 
-The phone shop agent now includes RAG capabilities for intelligent document retrieval. Here's how it works:
+The phone shop agent uses a hybrid architecture combining MCP for database access and RAG for document retrieval:
 
-### Automatic Setup
+### MCP Database Layer
 
-The RAG system automatically initializes when you first run the phone shop agent:
+The MCP system provides real-time access to structured phone data:
+
+1. **SQLite Database**: Stores phone specifications, prices, inventory, and offers
+2. **MCP Server**: Provides standardized API for database operations
+3. **MCP Client**: Integrates with ADK agent tools seamlessly
+4. **Real-time Data**: Always up-to-date pricing, stock levels, and promotions
+
+### RAG Document Layer
+
+The RAG system handles unstructured policy documents:
 
 1. **Vector Database**: ChromaDB creates a persistent vector store in the `chroma_db/` directory
 2. **Document Loading**: Policy documents are automatically chunked and embedded
-3. **Ready to Use**: The agent can immediately answer policy-related questions
+3. **Semantic Search**: Finds relevant policy information using similarity matching
 
 ### Manual RAG Operations
 

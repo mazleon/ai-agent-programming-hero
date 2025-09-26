@@ -1,8 +1,18 @@
-# This file contains all the tools for phone shop agent
+#!/usr/bin/env python3
+"""
+RAG-powered policy tools for phone shop agent.
+Provides warranty, replacement, and customer support information using
+Retrieval-Augmented Generation (RAG) from policy documents.
+
+This module contains only RAG-powered tools for policy information.
+MCP-powered phone database tools are in the separate 'mcp_tools.py' module.
+"""
+
 import json
 import os
 import sys
 from pathlib import Path
+from typing import Dict, List, Any
 
 # Add the parent directory to sys.path for imports
 current_dir = Path(__file__).parent
@@ -20,9 +30,9 @@ try:
         search_general_policy_info
     )
     RAG_AVAILABLE = True
-except ImportError as e:
-    print(f"RAG system not available: {e}")
+except ImportError:
     # Fallback: create simple text search functions using the markdown files directly
+    RAG_AVAILABLE = False
     
     def _simple_text_search(file_path, query, max_results=3):
         """Simple text search in markdown files as fallback."""
@@ -260,8 +270,6 @@ def get_customer_support_information(query: str) -> str:
         Relevant customer support information from policy documents.
     """
     try:
-        # Add debug info about RAG availability
-        rag_status = "RAG system" if RAG_AVAILABLE else "Simple text search"
         
         result = search_customer_support_info(query, max_results=3)
         
@@ -276,15 +284,13 @@ def get_customer_support_information(query: str) -> str:
             if sources:
                 response += f"Source: {', '.join(set(sources))}"
             
-            # Add system info for debugging
-            response += f"\n\n(Retrieved using: {rag_status})"
             
             return response.strip()
         else:
-            return f"I couldn't find specific customer support information for your query using {rag_status}. You can reach our customer service at 1-800-PHONE-HELP or visit our website for live chat support."
+            return "I couldn't find specific customer support information for your query. You can reach our customer service at 1-800-PHONE-HELP or visit our website for live chat support."
             
     except Exception as e:
-        return f"I'm having trouble accessing customer support information right now ({rag_status}). Please contact us at 1-800-PHONE-HELP for assistance. Error: {str(e)}"
+        return f"I'm having trouble accessing customer support information right now. Please contact us at 1-800-PHONE-HELP for assistance. Error: {str(e)}"
 
 
 def search_phone_shop_policies(query: str) -> str:
@@ -314,3 +320,12 @@ def search_phone_shop_policies(query: str) -> str:
             
     except Exception as e:
         return f"I'm having trouble accessing policy information right now. Please contact our customer service at 1-800-PHONE-HELP for assistance. Error: {str(e)}"
+
+
+# Export all RAG-powered policy tools
+__all__ = [
+    'get_warranty_information',
+    'get_replacement_information',
+    'get_customer_support_information',
+    'search_phone_shop_policies',
+]

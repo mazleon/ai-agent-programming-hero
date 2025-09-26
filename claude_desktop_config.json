@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "phone-shop-server": {
+      "command": "fastmcp",
+      "args": ["run", "src/phone_shop_agent/mcp/fastmcp_server.py"],
+      "cwd": "D:\\AI_Chatbot\\Gemini-ai-bot",
+      "env": {
+        "PYTHONPATH": "D:\\AI_Chatbot\\Gemini-ai-bot\\src"
+      }
+    }
+  }
+}

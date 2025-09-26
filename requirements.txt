@@ -1,6 +1,9 @@
 # Core Google ADK dependency
 google-adk
 
+# FastMCP (Model Context Protocol) dependencies
+fastmcp
+
 # RAG and Vector Database dependencies (optional - fallback text search available)
 # Uncomment the following lines to enable full RAG capabilities:
 # chromadb>=0.4.0
